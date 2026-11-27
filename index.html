@@ -531,11 +531,154 @@ tr.row-new{animation:rowSlideIn .6s var(--ease)}
 @keyframes btnScan{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 
 /* Tooltip mengambang interaktif untuk semua grafik Canvas & SVG */
-#chartTip{position:fixed;left:0;top:0;z-index:3200;pointer-events:none;background:rgba(16,38,29,.94);color:#fff;padding:8px 12px;border-radius:10px;border-left:3px solid #f2c14e;font-size:12px;line-height:1.45;box-shadow:0 12px 30px rgba(13,36,27,.26);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transform:translate3d(0,6px,0) scale(.96);transition:opacity .16s var(--ease),transform .16s var(--ease);max-width:260px}
+#chartTip{position:fixed;left:0;top:0;z-index:3200;pointer-events:none;background:rgba(16,38,29,.94);color:#fff;padding:8px 12px;border-radius:10px;border-left:3px solid #f2c14e;font-size:12px;line-height:1.45;box-shadow:0 12px 30px rgba(13,36,27,.26);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transform:translate3d(0,6px,0) scale(.96);transition:opacity .16s var(--ease),transform .16s var(--ease);max-width:min(260px,calc(100vw - 24px))}
 #chartTip.show{opacity:1;transform:translate3d(0,0,0) scale(1)}
 #chartTip b{color:#a7f3c5;font-weight:700}
 #chartTip .ct-sub{color:#cddcd4;font-size:11px;display:block;margin-top:2px}
-canvas.interactive-chart{cursor:crosshair}
+canvas.interactive-chart{cursor:crosshair;touch-action:pan-y}
+
+/* ================= Optimasi Tampilan Pengguna HP (Mobile-First Polish) ================= */
+html,body{overflow-x:clip;max-width:100%}
+.tbl-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid #e8eeea;background:#fff}
+.tbl-scroll>table{border:0;border-radius:0;min-width:100%}
+.svg-scroll-hint{display:none;font-size:11px;color:var(--muted);text-align:right;margin:0 0 6px;font-weight:500}
+#cascadeSvg svg{min-width:440px}
+
+@media (hover:none) and (pointer:coarse){
+  .lx-card:hover,.mod-card:hover,.btn:hover,.lx-ghost:hover{transform:none}
+  .lx-card::before,.mod-card::before{display:none}
+}
+
+@media(max-width:850px){
+  /* Header tetap lengket (sticky) & ringkas di HP */
+  .topbar{position:sticky!important;top:0;z-index:1000}
+  .nav{display:grid!important;grid-template-columns:1fr auto;grid-template-areas:"brand toggle" "links links";align-items:center;gap:6px 10px;padding:8px 14px 0!important;min-height:auto!important}
+  .brand{grid-area:brand;font-size:16px;gap:9px}
+  .brand-mark{width:32px;height:32px;border-radius:8px}
+  .brand-sub{display:none!important}
+  .link-toggle{grid-area:toggle;margin:0!important;padding:5px 10px;font-size:11.5px;min-height:34px}
+  .navlinks{grid-area:links;display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px;margin:0 -14px!important;padding:4px 14px 8px;width:calc(100% + 28px);-webkit-overflow-scrolling:touch;scrollbar-width:none;border-top:1px solid #eef3ef}
+  .navlinks::-webkit-scrollbar{display:none}
+  .navlinks button{min-height:36px!important;padding:0 12px!important;font-size:12.5px;border-radius:999px;background:#f3f7f4;color:#2b3d34;flex:0 0 auto}
+  .navlinks button.active{background:var(--teal);color:#fff!important;font-weight:600;box-shadow:0 3px 10px rgba(31,157,85,.24)}
+  .navlinks button::after{display:none!important}
+
+  /* Bilah pipeline 1 baris dapat digeser + kontrol kompak di bawah */
+  main{padding:10px 12px 54px!important}
+  .pipeline{padding:8px 10px!important;margin:10px 0 14px!important;gap:8px;flex-direction:column;align-items:stretch;border-radius:14px}
+  .pl-chain{flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;gap:5px}
+  .pl-chain::-webkit-scrollbar{display:none}
+  .pl-chain>*{flex:0 0 auto;white-space:nowrap}
+  .pipeline button{padding:6px 9px;font-size:11.5px;min-height:32px}
+  .pl-actions{display:grid!important;grid-template-columns:1fr auto auto;gap:6px;width:100%!important;margin-left:0!important}
+  .pl-preset{width:100%;min-height:38px;font-size:13px;padding:6px 8px}
+  .pl-actions button{min-height:38px;padding:6px 10px;font-size:12px;white-space:nowrap;flex:none!important}
+
+  /* Hero beranda yang lapang & terbaca di layar HP */
+  .lx-hero{min-height:auto!important;margin-top:calc(-1 * var(--plh,120px))}
+  .lx-inner{padding:calc(var(--plh,120px) + 18px) 14px 86px!important}
+  .lx-eyebrow{font-size:11.5px;margin-bottom:8px}
+  .lx-hero h1{font-size:clamp(26px,7.2vw,36px)!important;line-height:1.12;margin-bottom:10px}
+  .lx-hero p{font-size:13.5px;line-height:1.58}
+  .lx-seg{gap:2px;margin:16px 0 6px;max-width:100%}
+  .lx-seg i{height:16px;border-radius:2px}
+  .lx-seg-lbl{font-size:11.5px}
+  .lx-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:16px}
+  .lx-kpis .hero-kpi{background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(213,226,218,.9)!important;border-radius:12px;padding:10px 11px!important}
+  .lx-kpis .hero-kpi b{font-size:clamp(16px,4.5vw,20px)!important;white-space:normal;word-break:break-word}
+  .lx-kpis .hero-kpi b small{font-size:11.5px}
+  #hlVerdict{font-size:16px!important}
+  .lx-kpis .hero-kpi span{font-size:11px;margin-top:2px}
+  .lx-kpis .hero-kpi>small{font-size:10.5px;max-width:none}
+  .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+  .hero-actions .btn{justify-content:center;min-height:42px;padding:9px 12px;font-size:12.5px}
+  .hero-actions .btn:first-child{grid-column:1 / -1}
+
+  /* Kartu Bento mengambang tanpa tabrakan dengan ilustrasi */
+  .lx-cards{grid-template-columns:1fr!important;gap:12px;margin-top:-58px!important}
+  .lx-card{min-height:176px!important;padding:16px 18px 14px!important;border-radius:16px}
+  .lx-card h3{font-size:15px;margin-bottom:10px}
+  .lx-m{max-width:65%!important;margin-bottom:9px}
+  .lx-m b{font-size:17px}
+  .lx-m span{font-size:11px}
+  .lx-ill{width:104px!important;height:96px!important;right:-2px;bottom:6px;opacity:.92}
+
+  /* Pita suhu brine agar label silika & skala tidak terpotong */
+  .lx-thermal-card{padding:16px!important}
+  .lx-thermal-card .th-track{height:38px;margin-top:18px}
+  .lx-thermal-card .th-sil em{font-size:9.5px;top:-17px}
+  .th-temp{font-size:10.5px}
+  .lx-th-foot{flex-direction:column;align-items:stretch;gap:8px;font-size:12px}
+  .lx-th-foot .btn{justify-content:center;min-height:40px}
+
+  /* Kartu modul, hero halaman submodul, formulir anti-zoom iOS */
+  .page:not(#home) .hero{padding:18px 16px!important;border-radius:16px}
+  .page:not(#home) .hero h1{font-size:clamp(22px,6vw,28px)!important}
+  .page:not(#home) .hero p{font-size:13px}
+  .card{padding:15px 14px!important;border-radius:15px}
+  .card h3{font-size:15px}
+  .section{margin-top:18px}
+  .section h2{font-size:20px}
+  .section-head{gap:8px;margin-bottom:10px}
+  .fields{grid-template-columns:1fr!important;gap:0}
+  .field input,.field select{font-size:16px!important;padding:10px 11px;min-height:42px}
+  .field input[type="checkbox"]{min-height:auto;width:18px!important;height:18px}
+  .range-sync{height:8px;margin-top:8px}
+  .btn{min-height:42px}
+
+  /* Tab preset & sub-tab dapat digeser mulus */
+  .tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:4px;padding-bottom:2px}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{white-space:nowrap;flex:0 0 auto;min-height:38px;padding:7px 11px;font-size:12px}
+
+  /* Diagram alur vertikal di HP */
+  .flow{flex-direction:column;gap:6px}
+  .flow .step{min-width:0;padding:10px 12px}
+  .flow .arrow{transform:rotate(90deg);margin:-2px 0;font-size:14px}
+
+  /* Hasil KPI & metrik */
+  .result .big{font-size:26px}
+  .result-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+  .result-grid>div{padding:9px 10px}
+  .result-grid b{font-size:15px;word-break:break-word}
+  .result-grid span{font-size:10.5px}
+  .metric{font-size:22px}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}
+  .sdg-grid{grid-template-columns:1fr!important;gap:10px;border-top:0}
+  .sdg-card{margin:0;padding:12px 14px;background:#f7fbf8;border:1px solid var(--line);border-top:3px solid var(--teal);border-radius:12px}
+
+  /* Telemetri air 2x2 rapi */
+  .water-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;border-radius:12px;overflow:hidden}
+  .wk-card{border-bottom:1px solid var(--line);padding:10px 11px}
+  .wk-card:nth-child(even){border-right:0}
+  .wk-card:nth-last-child(-n+2){border-bottom:0}
+  .wk-card b{font-size:18px}
+
+  /* Tabel, grafik & skema SVG */
+  th,td{padding:7px 9px;font-size:11.5px}
+  .chart-wrap{padding:10px 8px;min-height:210px}
+  .svg-stage{padding:10px 8px}
+  .svg-scroll-hint{display:block}
+  .hm-table th,.hm-table td{padding:8px 4px;font-size:11.5px}
+
+  /* Peta spasial nyaman di HP */
+  .map-frame{height:74svh!important;min-height:480px;max-height:620px;border-radius:14px}
+
+  /* Panduan tur & toast di tengah bawah layar */
+  .tour-box{left:12px!important;right:12px!important;bottom:12px!important;width:auto!important;padding:14px 15px;border-radius:14px}
+  .tour-box h3{font-size:15px}
+  .tour-box p{font-size:12.5px}
+  .gl-toast{max-width:calc(100vw - 24px);text-align:center;bottom:16px}
+  .footer{padding:14px 14px 28px;font-size:11.5px}
+}
+
+@media(max-width:400px){
+  .lx-kpis .hero-kpi b{font-size:15.5px!important}
+  .lx-m{max-width:68%!important}
+  .lx-ill{width:88px!important;height:82px!important;opacity:.85}
+  .pl-actions{grid-template-columns:1fr 1fr}
+  .pl-preset{grid-column:1 / -1}
+}
 
 @media (prefers-reduced-motion:reduce){
   .lx-sun,.lx-cloud-1,.lx-cloud-2,.lx-cloud-3,.lx-steam,.lx-pipe-pulse,.lx-orc-led,.lx-contour,.ill-rotor,.ill-bolt,.ill-puff-1,.ill-puff-2,.ill-coins,.ill-bar,.svg-rotor,.svg-shimmer,.svg-pt-ring,.pl-live-dot,.pipeline.is-linked .arrow,.th-seg::after,.barline span::after,.page:not(#home) .hero::after{animation:none!important}
@@ -1126,7 +1269,7 @@ footer{max-width:1120px;margin:0 auto;padding:0 24px 40px;color:#7a8882;font-siz
 
 &lt;/style&gt;
 
-&lt;style&gt;.site-header{display:none!important}#map_b0fa60a674d0e5e8a7166a7dcb2a619b{height:100vh!important}.geolink-dashboard{top:12px!important;max-height:calc(100vh - 24px)!important}.legend-control{left:auto!important;right:12px!important;bottom:28px!important}.legend-content{margin-left:auto}@media(max-width:700px){.geolink-dashboard{max-height:46vh!important}}&lt;/style&gt;
+&lt;style&gt;.site-header{display:none!important}#map_b0fa60a674d0e5e8a7166a7dcb2a619b{height:100vh!important}.geolink-dashboard{top:12px!important;max-height:calc(100vh - 24px)!important}.legend-control{left:auto!important;right:12px!important;bottom:28px!important}.legend-content{margin-left:auto}@media(max-width:700px){.geolink-dashboard{left:10px!important;top:10px!important;width:calc(100vw - 20px)!important;max-width:340px!important;max-height:56vh!important;border-radius:14px}.geolink-dashboard.is-collapsed{width:auto!important;max-width:none!important;border-radius:12px;box-shadow:0 6px 18px rgba(18,52,42,.22)}.geolink-dashboard.is-collapsed .od-head{height:40px;padding:5px 10px;display:flex;align-items:center;gap:6px}.geolink-dashboard.is-collapsed .od-toggle{width:auto;height:30px;padding:0 10px;font-size:12px;font-weight:700;white-space:nowrap}.od-search,.od-input{font-size:14px!important;padding:8px 10px!important}.od-btn,.od-chips button{min-height:36px!important;font-size:11.5px!important}.legend-control{right:10px!important;bottom:14px!important}.legend-toggle{padding:7px 11px;font-size:11.5px}}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
     
@@ -1874,16 +2017,20 @@ legendToggle.addEventListener(&#x27;click&#x27;,()=&gt;{
 });
 
 
-// Dashboard buka/tutup — saat ditutup hanya menyisakan tombol kecil.
+// Dashboard buka/tutup — saat ditutup hanya menyisakan tombol kecil (di HP mulai tertutup agar peta penuh terlihat).
 const dashboard=document.getElementById(&#x27;geolinkDashboard&#x27;);
 const dashboardToggle=document.getElementById(&#x27;dashboardToggle&#x27;);
-dashboardToggle.addEventListener(&#x27;click&#x27;,()=&gt;{
- const collapsed=dashboard.classList.toggle(&#x27;is-collapsed&#x27;);
- dashboardToggle.textContent=collapsed?&#x27;☰&#x27;:&#x27;−&#x27;;
+function syncDashBtn(collapsed){
+ dashboardToggle.textContent=collapsed?(window.innerWidth&lt;=700?&#x27;☰ Panel Spasial&#x27;:&#x27;☰&#x27;):&#x27;−&#x27;;
  dashboardToggle.title=collapsed?&#x27;Buka dashboard&#x27;:&#x27;Tutup dashboard&#x27;;
  dashboardToggle.setAttribute(&#x27;aria-expanded&#x27;,String(!collapsed));
+}
+dashboardToggle.addEventListener(&#x27;click&#x27;,()=&gt;{
+ const collapsed=dashboard.classList.toggle(&#x27;is-collapsed&#x27;);
+ syncDashBtn(collapsed);
  setTimeout(()=&gt;geolinkMap.invalidateSize(),280);
 });
+if(window.innerWidth&lt;=700){dashboard.classList.add(&#x27;is-collapsed&#x27;);syncDashBtn(true);}
 
 // GEO-LINK v2 dashboard: marker registry is extracted from the original Folium map.
 const geolinkPoints = [{&quot;marker&quot;:&quot;circle_marker_cb2896132538c1f847a848cdfd227c84&quot;,&quot;lat&quot;:-7.2085,&quot;lon&quot;:110.3419,&quot;category&quot;:&quot;gedong&quot;,&quot;label&quot;:&quot;Candi Gedong Songo&quot;,&quot;sourceTooltip&quot;:&quot;Candi Gedong Songo | 0,0 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_68a9d09213004c345ce34c30dad8a17e&quot;,&quot;lat&quot;:-7.309305223502057,&quot;lon&quot;:110.35183319024152,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Manunggal 1 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Manunggal 1 (Jambu) | 11,3 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_1431fc3b05de5b2a31837ca0578ecc56&quot;,&quot;lat&quot;:-7.310055217025148,&quot;lon&quot;:110.34566633031518,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Manunggal 2 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Manunggal 2 (Jambu) | 11,3 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_132d4350847b668a220debab1e186713&quot;,&quot;lat&quot;:-7.30611162208413,&quot;lon&quot;:110.34638865451575,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Manunggal 3 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Manunggal 3 (Jambu) | 10,9 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_81e6d3bd6f34344aa5fb552b010d6ba2&quot;,&quot;lat&quot;:-7.304084448063864,&quot;lon&quot;:110.35194489447183,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Manunggal 4 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Manunggal 4 (Jambu) | 10,7 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_ec408c45157973e89a70805671484deb&quot;,&quot;lat&quot;:-7.304995771350292,&quot;lon&quot;:110.35669424513829,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Manunggal 5 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Manunggal 5 (Jambu) | 10,9 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_014e2c916eb1f7ae258d948be2c89bf3&quot;,&quot;lat&quot;:-7.309168764530054,&quot;lon&quot;:110.36527742861983,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Manunggal 6 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Manunggal 6 (Jambu) | 11,5 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_dcb928861bd71bfb26053b4a192c92dd&quot;,&quot;lat&quot;:-7.316941441446897,&quot;lon&quot;:110.36083364120957,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Manunggal 7 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Manunggal 7 (Jambu) | 12,2 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_8297d2629f9f3779518a5a356ecde5b0&quot;,&quot;lat&quot;:-7.324585083193776,&quot;lon&quot;:110.36749971869232,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Manunggal 8 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Manunggal 8 (Jambu) | 13,2 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_5951f46a3d3547dff63a08221ff84bb7&quot;,&quot;lat&quot;:-7.288995702547132,&quot;lon&quot;:110.36383378866987,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Rahayu 1 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Rahayu 1 (Jambu) | 9,3 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_31b24c6ea162dd5d29b0505afbe26ed0&quot;,&quot;lat&quot;:-7.2981643585559715,&quot;lon&quot;:110.35513859594087,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Rahayu 2 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Rahayu 2 (Jambu) | 10,1 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_087ebefd5a9eda4b9eb6876cebaf177f&quot;,&quot;lat&quot;:-7.302697380457007,&quot;lon&quot;:110.3624446866988,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Rahayu 3 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Rahayu 3 (Jambu) | 10,7 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_e85481d89224aa13e6d740b34d554a76&quot;,&quot;lat&quot;:-7.314665577671703,&quot;lon&quot;:110.36977765021976,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Rahayu 4 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Rahayu 4 (Jambu) | 12,2 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_1c7df62136234f4b993817ace0b30074&quot;,&quot;lat&quot;:-7.297058071205545,&quot;lon&quot;:110.35955557626525,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Rahayu 5 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Rahayu 5 (Jambu) | 10,0 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_ff50e26bc4675fd21cf98c4e2a5bf7fe&quot;,&quot;lat&quot;:-7.308607135543631,&quot;lon&quot;:110.36469480073936,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Rahayu 6 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Rahayu 6 (Jambu) | 11,4 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_f605b2631726c1eb314c0258c4cade15&quot;,&quot;lat&quot;:-7.295636027834604,&quot;lon&quot;:110.35819421032457,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Rahayu 7 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Rahayu 7 (Jambu) | 9,9 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_5de4fadcc775352a955c72c14e2bb608&quot;,&quot;lat&quot;:-7.29391552719662,&quot;lon&quot;:110.36324978480508,&quot;category&quot;:&quot;kopi&quot;,&quot;label&quot;:&quot;Kelompok tani kopi Rahayu 8 (Jambu)&quot;,&quot;sourceTooltip&quot;:&quot;Kelompok tani kopi Rahayu 8 (Jambu) | 9,8 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_a88368ebc1e354aa793d8837f4e29d26&quot;,&quot;lat&quot;:-7.19917,&quot;lon&quot;:110.28444,&quot;category&quot;:&quot;proksi&quot;,&quot;label&quot;:&quot;Sumowono (proksi: Desa Keseneng)&quot;,&quot;sourceTooltip&quot;:&quot;Sumowono (proksi: Desa Keseneng) | 6,4 km dari Gedong Songo | keyakinan: rendah&quot;,&quot;confidence&quot;:&quot;rendah&quot;},{&quot;marker&quot;:&quot;circle_marker_9b3da31e1a81f1f2e12915e78166e882&quot;,&quot;lat&quot;:-7.3998,&quot;lon&quot;:110.4177,&quot;category&quot;:&quot;proksi&quot;,&quot;label&quot;:&quot;Kopeng (Getasan)&quot;,&quot;sourceTooltip&quot;:&quot;Kopeng (Getasan) | 22,9 km dari Gedong Songo | keyakinan: sedang&quot;,&quot;confidence&quot;:&quot;sedang&quot;},{&quot;marker&quot;:&quot;circle_marker_e5487622433c8cc30a80c17837deda1e&quot;,&quot;lat&quot;:-7.2083,&quot;lon&quot;:110.3667,&quot;category&quot;:&quot;proksi&quot;,&quot;label&quot;:&quot;Kecamatan Bandungan (pusat perkiraan)&quot;,&quot;sourceTooltip&quot;:&quot;Kecamatan Bandungan (pusat perkiraan) | 2,7 km dari Gedong Songo | keyakinan: rendah&quot;,&quot;confidence&quot;:&quot;rendah&quot;}];
@@ -2330,7 +2477,7 @@ let chartAnimOn=true;
 function pulseChartAnim(ms=650){chartAnimOn=true;clearTimeout(pulseChartAnim._t);pulseChartAnim._t=setTimeout(()=>{chartAnimOn=false},ms)}
 function showPage(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
- document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+ document.querySelectorAll('[data-page]').forEach(b=>{const on=b.dataset.page===id;b.classList.toggle('active',on);if(on&&window.innerWidth<=850)b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})});
  hideChartTip();
  window.scrollTo({top:0,behavior:'smooth'});
  if(id==='spatial'){const f=document.querySelector('.map-frame');setTimeout(()=>{try{f.contentWindow.dispatchEvent(new Event('resize'))}catch(e){}},300)}
@@ -2361,8 +2508,11 @@ function bindChartHover(c,onMove){
  c._onMove=onMove;
  if(c._tipBound)return;
  c._tipBound=true;
- c.addEventListener('mousemove',ev=>{const r=c.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top;if(c._onMove)c._onMove(ev,mx,my)});
+ const handle=(ev,cx,cy)=>{const r=c.getBoundingClientRect();if(c._onMove)c._onMove({clientX:cx,clientY:cy},cx-r.left,cy-r.top)};
+ c.addEventListener('mousemove',ev=>handle(ev,ev.clientX,ev.clientY));
  c.addEventListener('mouseleave',()=>{c._hoverIdx=-1;c._hoverX=null;hideChartTip();if(c._redraw)c._redraw(1)});
+ c.addEventListener('touchstart',ev=>{if(!ev.touches.length)return;const t=ev.touches[0];handle(ev,t.clientX,t.clientY)},{passive:true});
+ c.addEventListener('touchmove',ev=>{if(!ev.touches.length)return;const t=ev.touches[0];handle(ev,t.clientX,t.clientY)},{passive:true});
 }
 function drawBars(canvasId,items,opts){
  opts=opts||{};const c=$(canvasId);if(!c||!items.length)return;
@@ -2482,8 +2632,8 @@ function drawOrcSens(){
    if(p.be!=null&&p.be>=0&&p.be<=25&&pEnd>=p.be){const bx=sx(p.be);x.fillStyle='#fff';x.strokeStyle=p.col;x.lineWidth=2.4;x.beginPath();x.arc(bx,zY,4.8,0,Math.PI*2);x.fill();x.stroke();
     x.fillStyle=p.col;x.font='700 9.5px "IBM Plex Sans",Arial';x.textAlign='center';x.fillText('impas '+fmt(p.be,1)+'%',bx,zY+(idx%2===0?-10:17))}
   });
-  let lx=left;x.font='700 10px "IBM Plex Sans",Arial';
-  pts.forEach(p=>{x.fillStyle=p.col;rrect(x,lx,7,14,4,2);x.fill();x.fillStyle='#24342e';x.textAlign='left';x.fillText(p.lbl,lx+18,12.5);lx+=Math.min(108,(w-left)/3)});
+  let lx=w<430?12:left;x.font=(w<430?'700 9px':'700 10px')+' "IBM Plex Sans",Arial';
+  pts.forEach(p=>{x.fillStyle=p.col;rrect(x,lx,7,w<430?10:14,4,2);x.fill();x.fillStyle='#24342e';x.textAlign='left';x.fillText(w<430?p.lbl.replace('US$','$'):p.lbl,lx+(w<430?13:18),12.5);lx+=Math.min(108,(w-(w<430?16:left))/3)});
   if(hovPct!=null&&hovPct>=0&&hovPct<=25){
    const hx=sx(hovPct);
    x.save();x.strokeStyle='rgba(19,38,29,.4)';x.lineWidth=1.2;x.setLineDash([3,3]);x.beginPath();x.moveTo(hx,top);x.lineTo(hx,bot);x.stroke();x.setLineDash([]);
@@ -2510,12 +2660,16 @@ function drawTornado(canvasId,items,base){
  const rowH=30;
  const render=(prog,hovRow)=>{
   const {x,w,h}=prepCanvas(c,Math.max(198,items.length*rowH+66));
-  const labelW=Math.min(248,w*.43),left=labelW+12,right=w-64;
+  const narrow=w<440;
+  const labelW=narrow?Math.min(132,w*.40):Math.min(248,w*.43),left=labelW+10,right=w-(narrow?48:64);
   const vals=items.flatMap(i=>[i.lo,i.hi]).concat(base);const mn=Math.min(...vals),mx=Math.max(...vals);
   const sx=v=>left+(v-mn)/((mx-mn)||1)*(right-left),bx=sx(base);
-  x.font='700 10.5px "IBM Plex Sans",Arial';x.fillStyle='#2b7a4b';rrect(x,left,6,11,11,3);x.fill();x.fillStyle='#2c4239';x.textAlign='left';x.fillText('Menguntungkan (> dasar)',left+16,15);
-  const leg2=Math.min(w-158,left+174);x.fillStyle='#b8860b';rrect(x,leg2,6,11,11,3);x.fill();x.fillStyle='#2c4239';x.fillText('Merugikan (< dasar)',leg2+16,15);
-  x.font='600 11px "IBM Plex Sans",Arial';
+  x.font=(narrow?'700 9.5px':'700 10.5px')+' "IBM Plex Sans",Arial';
+  const lx1=narrow?8:left;
+  x.fillStyle='#2b7a4b';rrect(x,lx1,6,10,10,3);x.fill();x.fillStyle='#2c4239';x.textAlign='left';x.fillText(narrow?'Untung (> dasar)':'Menguntungkan (> dasar)',lx1+14,15);
+  const leg2=narrow?Math.max(lx1+118,w-132):Math.min(w-158,left+174);
+  x.fillStyle='#b8860b';rrect(x,leg2,6,10,10,3);x.fill();x.fillStyle='#2c4239';x.fillText(narrow?'Rugi (< dasar)':'Merugikan (< dasar)',leg2+14,15);
+  x.font=(narrow?'600 9.5px':'600 11px')+' "IBM Plex Sans",Arial';
   items.forEach((it,k)=>{
    const y=28+k*rowH,isHov=hovRow===k;
    const stagger=items.length>1?(k/(items.length-1))*0.22:0;
@@ -2528,10 +2682,10 @@ function drawTornado(canvasId,items,base){
     const a=sx(Math.min(curV,base)),b=sx(Math.max(curV,base));
     rrect(x,a,y+3,Math.max(3,b-a),16,4);x.fill();
    });
-   if(lp>0.6){x.fillStyle='#556860';x.font='700 10.5px "IBM Plex Sans",Arial';x.textAlign='left';x.fillText(fmt((Math.max(it.lo,it.hi)-Math.min(it.lo,it.hi))/1e6,1)+' jt',sx(Math.max(it.lo,it.hi,base))+5,y+15);x.font='600 11px "IBM Plex Sans",Arial'}
+   if(lp>0.6){x.fillStyle='#556860';x.font=(narrow?'700 9.5px':'700 10.5px')+' "IBM Plex Sans",Arial';x.textAlign='left';x.fillText(fmt((Math.max(it.lo,it.hi)-Math.min(it.lo,it.hi))/1e6,1)+' jt',sx(Math.max(it.lo,it.hi,base))+4,y+15);x.font=(narrow?'600 9.5px':'600 11px')+' "IBM Plex Sans",Arial'}
   });
   x.strokeStyle='#12342a';x.lineWidth=1.5;x.beginPath();x.moveTo(bx,23);x.lineTo(bx,h-24);x.stroke();
-  x.fillStyle='#12342a';x.font='700 10.5px "IBM Plex Sans",Arial';x.textAlign='center';x.fillText('NPV dasar '+musd(base),bx,h-9);
+  x.fillStyle='#12342a';x.font=(narrow?'700 9.5px':'700 10.5px')+' "IBM Plex Sans",Arial';x.textAlign='center';x.fillText('NPV dasar '+musd(base),Math.min(w-70,Math.max(70,bx)),h-9);
  };
  c._redraw=(p)=>render(p,c._hoverIdx??-1);
  runCanvasAnim(c,540,p=>render(p,-1));
@@ -3067,6 +3221,20 @@ if(!seen)setTimeout(()=>tourShow(0),700);
   });
  }
  window._triggerReveals=triggerReveals;
+ // 6. Optimasi HP: bungkus otomatis tabel lebar agar bisa digeser horizontal & petunjuk geser skema SVG + tutup tooltip saat sentuh luar
+ document.querySelectorAll('main table:not(.hm-table)').forEach(tbl=>{
+  const p=tbl.parentElement;
+  if(!p||(p.style&&p.style.overflowX==='auto')||p.classList.contains('tbl-scroll'))return;
+  const w=document.createElement('div');w.className='tbl-scroll';
+  p.insertBefore(w,tbl);w.appendChild(tbl);
+ });
+ document.querySelectorAll('.svg-stage').forEach(st=>{
+  if(st.previousElementSibling&&st.previousElementSibling.classList.contains('svg-scroll-hint'))return;
+  const hint=document.createElement('div');hint.className='svg-scroll-hint';hint.textContent='← Geser kiri/kanan untuk melihat skema penuh →';
+  st.parentElement.insertBefore(hint,st);
+ });
+ document.addEventListener('touchstart',ev=>{if(!ev.target.closest('canvas.interactive-chart,[data-svg-tip],.th-seg'))hideChartTip()},{passive:true});
+
  triggerReveals('home');
  setTimeout(()=>{chartAnimOn=false},800);
 })();

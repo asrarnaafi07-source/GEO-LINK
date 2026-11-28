@@ -550,12 +550,23 @@ html,body{overflow-x:clip;max-width:100%;-webkit-text-size-adjust:100%}
 .svg-stage{width:100%;max-width:100%;min-width:0;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain}
 #cascadeSvg svg{min-width:440px}
 
-/* Layar penuh peta khusus iPhone / mobile (karena Fullscreen API iframe terbatas di iOS Safari) */
+/* Layar penuh peta & simulasi 3D khusus iPhone / mobile (karena Fullscreen API iframe terbatas di iOS Safari) */
 .map-frame-wrap{position:relative;width:100%}
 .map-fs-close{display:none}
 .map-frame-wrap.is-fs{position:fixed;inset:0;z-index:4000;width:100vw;height:100dvh;background:#12342a;padding-top:env(safe-area-inset-top,0px)}
-.map-frame-wrap.is-fs .map-frame{width:100%!important;height:calc(100dvh - env(safe-area-inset-top,0px))!important;max-height:none!important;min-height:0!important;border:0!important;border-radius:0!important}
+.map-frame-wrap.is-fs .map-frame,.map-frame-wrap.is-fs .sim3d-frame{width:100%!important;height:calc(100dvh - env(safe-area-inset-top,0px))!important;max-height:none!important;min-height:0!important;border:0!important;border-radius:0!important}
 .map-frame-wrap.is-fs .map-fs-close{display:inline-flex;align-items:center;gap:6px;position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:50%;transform:translateX(-50%);z-index:4010;background:rgba(18,52,42,.95);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:8px 16px;font-size:12.5px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+
+/* Modul Simulasi Alur 3D */
+.sim3d-frame{width:100%;aspect-ratio:16/9;min-height:540px;max-height:760px;border:1px solid var(--line);border-radius:16px;background:#eef0ec;display:block}
+.sim3d-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sim3d-bar .btn{padding:7px 12px;font-size:12px}
+.sim3d-mob-tip{display:none;margin-top:10px;padding:10px 12px;border-radius:12px;background:#eef7f1;border:1px solid #cce6d5;font-size:12px;color:#1b4d33;line-height:1.45}
+.sim3d-guide{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+.sim3d-guide-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow-sm)}
+.sim3d-guide-card b{display:block;font-size:13px;color:var(--ink);margin-bottom:5px}
+.sim3d-guide-card p{margin:0;font-size:12px;color:var(--muted);line-height:1.5}
+@media(max-width:1020px){.sim3d-guide{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 @media (hover:none) and (pointer:coarse){
   .lx-card:hover,.mod-card:hover,.btn:hover,.lx-ghost:hover{transform:none}
@@ -604,8 +615,7 @@ html,body{overflow-x:clip;max-width:100%;-webkit-text-size-adjust:100%}
   .lx-kpis .hero-kpi span{font-size:11px;margin-top:2px}
   .lx-kpis .hero-kpi>small{font-size:10.5px;max-width:none}
   .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
-  .hero-actions .btn{justify-content:center;min-height:42px;padding:9px 12px;font-size:12.5px}
-  .hero-actions .btn:first-child{grid-column:1 / -1}
+  .hero-actions .btn{justify-content:center;min-height:42px;padding:9px 10px;font-size:12.5px}
 
   /* Kartu Bento mengambang tanpa tabrakan dengan ilustrasi */
   .lx-cards{grid-template-columns:1fr!important;gap:12px;margin-top:-58px!important}
@@ -676,8 +686,13 @@ html,body{overflow-x:clip;max-width:100%;-webkit-text-size-adjust:100%}
   .svg-toolbar{display:flex}
   .hm-table th,.hm-table td{padding:8px 4px;font-size:11.5px}
 
-  /* Peta spasial nyaman di HP */
+  /* Peta spasial & simulasi 3D nyaman di HP */
   .map-frame{height:70dvh!important;min-height:460px;max-height:600px;border-radius:14px}
+  .sim3d-frame{height:58vw!important;min-height:240px!important;max-height:420px!important;aspect-ratio:auto!important;border-radius:12px}
+  .sim3d-bar{width:100%;gap:6px}
+  .sim3d-bar .btn{min-height:36px;padding:6px 10px;font-size:11.5px;flex:1 1 auto;justify-content:center}
+  .sim3d-mob-tip{display:block}
+  .sim3d-guide{grid-template-columns:1fr!important;gap:10px}
 
   /* Panduan tur & toast di tengah bawah layar */
   .tour-box{left:12px!important;right:12px!important;bottom:calc(env(safe-area-inset-bottom,0px) + 12px)!important;width:auto!important;padding:14px 15px;border-radius:14px}
@@ -710,7 +725,7 @@ html,body{overflow-x:clip;max-width:100%;-webkit-text-size-adjust:100%}
     <span>GEO-LINK<span class="brand-sub">PLATFORM SIMULASI PANAS BUMI</span></span>
   </div>
   <div class="navlinks">
-    <button class="active" data-page="home">Beranda</button><button data-page="spatial">Spasial</button><button data-page="orc">ORC</button><button data-page="cascade">Heat Cascade</button><button data-page="economic">Ekonomi</button><button data-page="scenario">Skenario</button><button data-page="decision">Rekomendasi</button><button data-page="risk">Risiko</button><button data-page="community">Komunitas</button><button data-page="about">Metodologi</button>
+    <button class="active" data-page="home">Beranda</button><button data-page="spatial">Spasial</button><button data-page="sim3d">Alur 3D</button><button data-page="orc">ORC</button><button data-page="cascade">Heat Cascade</button><button data-page="economic">Ekonomi</button><button data-page="scenario">Skenario</button><button data-page="decision">Rekomendasi</button><button data-page="risk">Risiko</button><button data-page="community">Komunitas</button><button data-page="about">Metodologi</button>
   </div>
   <label class="link-toggle" title="Hubungkan keluaran ORC ke Heat Cascade dan Ekonomi"><input type="checkbox" id="linkMode" checked> Mode terintegrasi</label>
 </nav></header>
@@ -792,7 +807,7 @@ html,body{overflow-x:clip;max-width:100%;-webkit-text-size-adjust:100%}
    <div class="lx-copy">
     <div class="lx-eyebrow">Ketahanan Energi &amp; Pangan • Sistem Pendukung Keputusan</div>
     <h1>Platform Simulasi<br>Panas Bumi Terintegrasi</h1>
-    <p>GEO-LINK (<i>Geothermal Energy Optimization and Local Integration Network</i>) menghubungkan daya bersih ORC, pemanfaatan bertingkat (<i>heat cascade</i>), arus kas, risiko Monte Carlo, dan jarak spasial secara waktu nyata untuk studi kasus panas bumi Ungaran.</p>
+    <p>GEO-LINK (<i>Geothermal Energy Optimization and Local Integration Network</i>) menghubungkan simulasi alur 3D, daya bersih ORC, pemanfaatan bertingkat (<i>heat cascade</i>), arus kas, risiko Monte Carlo, dan jarak spasial secara waktu nyata untuk studi kasus panas bumi Ungaran.</p>
     <div class="lx-seg" id="lxSeg" role="img" aria-label="Kriteria rekomendasi yang terpenuhi"></div>
     <div class="lx-seg-lbl" id="lxSegLbl">Menghitung kriteria rekomendasi…</div>
     <div class="lx-kpis" id="heroLive">
@@ -801,7 +816,7 @@ html,body{overflow-x:clip;max-width:100%;-webkit-text-size-adjust:100%}
      <div class="hero-kpi"><b id="hlFarmer">—</b><span>Manfaat petani / tahun</span><small id="hlRatio">Rasio sosial —</small></div>
      <div class="hero-kpi"><b id="hlVerdict">—</b><span>Status kelayakan</span><small id="hlBest">Skenario terbaik —</small></div>
     </div>
-    <div class="hero-actions"><button class="btn" data-go="orc">Mulai simulasi ORC →</button><button class="btn lx-ghost" data-go="spatial">Peta spasial</button><button class="btn lx-ghost" data-go="decision">Lihat rekomendasi</button></div>
+    <div class="hero-actions"><button class="btn" data-go="orc">Mulai simulasi ORC →</button><button class="btn lx-ghost" data-go="sim3d">Simulasi Alur 3D</button><button class="btn lx-ghost" data-go="spatial">Peta spasial</button><button class="btn lx-ghost" data-go="decision">Lihat rekomendasi</button></div>
    </div>
   </div>
  </div>
@@ -877,7 +892,7 @@ html,body{overflow-x:clip;max-width:100%;-webkit-text-size-adjust:100%}
   </div>
   <div class="lx-th-foot"><span id="hlHeat">Heat cascade: —</span><button type="button" class="btn lx-ghost" data-go="risk">Uji Monte Carlo →</button></div>
  </div>
- <div class="section"><div class="section-head"><div><h2>Jelajahi 9 Modul Terintegrasi</h2><p>Klik kartu mana pun untuk membuka modul simulasi — seluruh parameter mengalir otomatis.</p></div><span class="tag">Berbasis peramban • Tanpa login</span></div>
+ <div class="section"><div class="section-head"><div><h2>Jelajahi 10 Modul Terintegrasi</h2><p>Klik kartu mana pun untuk membuka modul simulasi — seluruh parameter mengalir otomatis.</p></div><span class="tag">Berbasis peramban • Tanpa login</span></div>
   <div class="grid">
    <div class="card mod-card" data-go="orc"><div class="mod-top"><span class="tag">01 • ORC</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span></div><h3>Mesin skenario ORC</h3><p>Skema SVG interaktif siklus penutup (bottoming) &amp; pembangkit utama, lengkap dengan slider suhu/debit dan 4 preset skenario.</p><span class="mod-go">Buka Simulator ORC →</span></div>
    <div class="card mod-card" data-go="cascade"><div class="mod-top"><span class="tag">02 • Heat cascade</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg></span></div><h3>Neraca panas bertingkat</h3><p>Kurva profil suhu 3 tahap (gula aren/teh, ruang dingin absorpsi, pengeringan kopi) beserta batas aman silika.</p><span class="mod-go">Buka Heat Cascade →</span></div>
@@ -886,8 +901,9 @@ html,body{overflow-x:clip;max-width:100%;-webkit-text-size-adjust:100%}
    <div class="card mod-card" data-go="decision"><div class="mod-top"><span class="tag">05 • Rekomendasi</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span></div><h3>Rekomendasi otomatis</h3><p>Evaluasi berbasis ambang batas transparan, Zonasi Termal, salin ringkasan, dan cetak laporan PDF siap pakai.</p><span class="mod-go">Lihat Rekomendasi →</span></div>
    <div class="card mod-card" data-go="risk"><div class="mod-top"><span class="tag">06 • Risiko</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span></div><h3>Monte Carlo &amp; Matriks Risiko</h3><p>Simulasi hingga 50.000 iterasi, diagram tornado sensitivitas, dan matriks sebaran risiko 5×5 interaktif sebelum vs setelah mitigasi.</p><span class="mod-go">Uji Ketidakpastian →</span></div>
    <div class="card mod-card" data-go="spatial"><div class="mod-top"><span class="tag">07 • Spasial</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span></div><h3>Peta panas &amp; pengguna</h3><p>Gedong Songo, 16 kelompok tani kopi Jambu, Bandungan, titik hub optimal (Weiszfeld), dan radius penyaluran panas interaktif.</p><span class="mod-go">Buka Dasbor Spasial →</span></div>
-   <div class="card mod-card" data-go="community"><div class="mod-top"><span class="tag">08 • Komunitas</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span></div><h3>Pemuda &amp; data terbuka</h3><p>Manfaat petani, bonus produksi BUMDes, purwarupa pemantauan mata air citizen-science, dan peta jalan menuju COD 2031.</p><span class="mod-go">Lihat Dampak Warga →</span></div>
-   <div class="card mod-card" data-go="about"><div class="mod-top"><span class="tag">09 • Metodologi</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span></div><h3>Asumsi &amp; transparansi</h3><p>Audit lengkap status setiap angka bawaan: data regulasi, data sekunder, asumsi esai, hingga nilai sementara menunggu sumur uji.</p><span class="mod-go">Baca Metodologi →</span></div>
+   <div class="card mod-card" data-go="sim3d"><div class="mod-top"><span class="tag">08 • Alur 3D</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span></div><h3>Simulasi alur 3D</h3><p>Visualisasi WebGL 3D dari sumur produksi, separator V-101, PLTP flash &amp; ORC, pemanfaatan bertingkat 3 tahap, penampang bawah tanah, hingga reinjeksi.</p><span class="mod-go">Buka Simulasi 3D →</span></div>
+   <div class="card mod-card" data-go="community"><div class="mod-top"><span class="tag">09 • Komunitas</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span></div><h3>Pemuda &amp; data terbuka</h3><p>Manfaat petani, bonus produksi BUMDes, purwarupa pemantauan mata air citizen-science, dan peta jalan menuju COD 2031.</p><span class="mod-go">Lihat Dampak Warga →</span></div>
+   <div class="card mod-card" data-go="about"><div class="mod-top"><span class="tag">10 • Metodologi</span><span class="mod-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span></div><h3>Asumsi &amp; transparansi</h3><p>Audit lengkap status setiap angka bawaan: data regulasi, data sekunder, asumsi esai, hingga nilai sementara menunggu sumur uji.</p><span class="mod-go">Baca Metodologi →</span></div>
   </div>
  </div>
  <div class="section grid2">
@@ -2184,6 +2200,49 @@ setSite(gedongRef,true);
  </div>
 </section>
 
+<section class="page" id="sim3d">
+ <div class="section-head">
+  <div>
+   <h2>Simulasi Alur 3D GEO-LINK</h2>
+   <p>Visualisasi tiga dimensi interaktif alur fluida panas bumi: sumur produksi, separator V-101, turbin flash &amp; ORC penutup, pemanfaatan bertingkat 3 tahap (140 → 60 °C), hingga sumur reinjeksi.</p>
+  </div>
+  <div class="sim3d-bar">
+   <button type="button" class="btn lx-ghost" id="sim3dSyncBtn" title="Terapkan skenario dan debit brine aktif dari Simulator ORC ke model 3D">⇄ Sinkronkan dari ORC</button>
+   <button type="button" class="btn lx-ghost" id="sim3dTourBtn" title="Mulai ulang tur kamera otomatis 75 detik di dalam kanvas 3D">▶ Tur otomatis 3D</button>
+   <span class="svg-zoom-btns" aria-label="Zoom kamera 3D">
+    <button type="button" id="sim3dZoomOut" title="Perkecil tampilan 3D">−</button>
+    <button type="button" id="sim3dZoomReset" title="Reset sudut kamera 3D">Reset</button>
+    <button type="button" id="sim3dZoomIn" title="Perbesar tampilan 3D">+</button>
+   </span>
+   <button type="button" class="btn lx-ghost" id="sim3dFsBtn">⛶ Layar penuh 3D</button>
+   <a class="btn lx-ghost" href="simulasi-3d.html" target="_blank" rel="noopener" style="text-decoration:none">↗ Tab baru</a>
+  </div>
+ </div>
+ <div class="map-frame-wrap" id="sim3dWrap">
+  <button type="button" class="map-fs-close" id="sim3dFsClose">✕ Tutup layar penuh</button>
+  <iframe id="sim3dFrame" class="sim3d-frame" title="Simulasi Alur 3D GEO-LINK" data-src="simulasi-3d.html" loading="lazy" allow="fullscreen"></iframe>
+ </div>
+ <div class="sim3d-mob-tip"><b>Tips pengguna iPhone &amp; HP:</b> Seret 1 jari di kanvas untuk memutar kamera 3D, cubit 2 jari (atau tekan tombol <b>− / +</b>) untuk memperbesar/memperkecil, dan ketuk <b>⛶ Layar penuh 3D</b> lalu putar ponsel ke posisi lanskap untuk tampilan detail paling lega.</div>
+ <div class="sim3d-guide">
+  <div class="sim3d-guide-card">
+   <b>1. Navigasi Kamera &amp; Sentuh</b>
+   <p>Klik-seret (atau geser 1 jari di HP) untuk memutar kamera 360°, gulir mouse atau cubit 2 jari untuk zoom, serta pilih sudut cepat <i>Ikhtisar</i>, <i>Sumur &amp; Reservoir</i>, <i>Pembangkit</i>, atau <i>Bertingkat</i>.</p>
+  </div>
+  <div class="sim3d-guide-card">
+   <b>2. Tur Otomatis vs Kendali Manual</b>
+   <p>Simulasi memulai <b>Tur Otomatis (75 detik)</b> dengan narasi alur energi. Klik tombol status di atas kanvas atau sentuh/seret model kapan saja untuk mengambil alih kendali manual.</p>
+  </div>
+  <div class="sim3d-guide-card">
+   <b>3. Tembus Pandang &amp; Penampang</b>
+   <p>Aktifkan <b>Tembus Pandang (X-Ray)</b> untuk melihat bundel pipa internal penukar panas &amp; rotor turbin, atau <b>Penampang</b> untuk menyingkap lapisan batuan reservoir serta sumur produksi–reinjeksi.</p>
+  </div>
+  <div class="sim3d-guide-card">
+   <b>4. Uji Skenario &amp; Katup FV-301</b>
+   <p>Bandingkan <b>Skenario A (170 °C Flash+ORC)</b> vs <b>Skenario B (150 °C ORC Utama)</b>, atur laju brine &amp; bukaan katup samping <b>FV-301</b>, atau tekan <b>⇄ Sinkronkan dari ORC</b> untuk membawa input simulasi aktif.</p>
+  </div>
+ </div>
+</section>
+
 <section class="page" id="orc">
  <div class="hero"><div class="eyebrow">Modul 1 • Simulasi skenario teknis</div><h1>Simulator ORC</h1><p>Hitung panas termal, daya bruto, dan daya bersih dari kondisi fluida. Saat <b>mode terintegrasi</b> aktif, daya bersih otomatis menjadi kapasitas pada modul Ekonomi, sedangkan suhu keluar dan debit brine menjadi sumber Heat Cascade.</p></div>
  <div class="section card">
@@ -2457,7 +2516,7 @@ setSite(gedongRef,true);
 <section class="page" id="about">
  <div class="hero"><div class="eyebrow">Metodologi dan batasan</div><h1>Metodologi dan batasan</h1><p>GEO-LINK adalah alat eksplorasi konsep dan penapisan awal. Simulasi tidak menggantikan studi reservoir, desain proses, kajian lingkungan, maupun studi kelayakan bankable.</p></div>
  <div class="section grid2">
-  <div class="card"><h3>Integrasi antarmodul</h3><p>Pada mode terintegrasi, daya bersih ORC menjadi kapasitas ekonomi, sedangkan suhu keluar dan debit brine ORC menjadi sumber heat cascade. Fraksi kebutuhan panas yang terpenuhi menentukan manfaat pemanfaatan langsung pada arus kas. Hasil seluruh modul masuk ke perbandingan skenario dan rekomendasi. Mode manual memutus tautan ini agar setiap modul dapat diuji terpisah.</p></div>
+  <div class="card"><h3>Integrasi antarmodul</h3><p>Pada mode terintegrasi, daya bersih ORC menjadi kapasitas ekonomi, sedangkan suhu keluar dan debit brine ORC menjadi sumber heat cascade. Fraksi kebutuhan panas yang terpenuhi menentukan manfaat pemanfaatan langsung pada arus kas. Hasil seluruh modul masuk ke perbandingan skenario dan rekomendasi, dan kondisi skenario serta debit brine dapat disinkronkan ke modul <b>Alur 3D</b> untuk melihat visualisasi tiga dimensinya. Mode manual memutus tautan kalkulasi agar setiap modul dapat diuji terpisah.</p></div>
   <div class="card"><h3>Asumsi teknis</h3><p>Q = ṁ × Cp × ΔT. Daya bruto = panas diserap × efisiensi bruto, lalu dikurangi beban parasitik. Heat cascade dihitung berurutan; tiap tahap hanya mengambil panas selama suhu brine di atas syarat minimumnya. Model tidak menyelesaikan siklus termodinamika, pinch analysis, atau karakteristik fluida kerja.</p></div>
   <div class="card"><h3>Asumsi ekonomi</h3><p>Basis bawaan sama dengan Lampiran 7 esai: proyek gabungan PLTP flash 20 MW + ORC + pemanfaatan bertingkat, dengan syarat pengeboran berhasil. Basis inkremental (hanya ORC dan fasilitas warga) tersedia sebagai pembanding. NPV, IRR, LCOE, dan tarif impas memakai arus kas tahunan konstan. Pajak, pembiayaan, inflasi, eskalasi tarif, degradasi, dan risiko konstruksi belum dimodelkan.</p></div>
   <div class="card"><h3>Asumsi Monte Carlo dan spasial</h3><p>Tujuh parameter dan rentangnya mengikuti Tabel L7.8 esai, disampel independen dengan distribusi segitiga (atau uniform). Korelasi antarparameter belum dimasukkan. Jarak pada peta adalah jarak garis lurus, bukan rute pipa; lokasi dan kebutuhan energi wajib diverifikasi lapangan.</p></div>
@@ -2502,6 +2561,15 @@ function showPage(id){
  hideChartTip();
  window.scrollTo({top:0,behavior:'smooth'});
  if(id==='spatial'){const f=document.querySelector('.map-frame');setTimeout(()=>{try{f.contentWindow.dispatchEvent(new Event('resize'))}catch(e){}},300)}
+ const f3=$('sim3dFrame');
+ if(f3){
+  if(id==='sim3d'){
+   if(!f3.getAttribute('src')&&f3.dataset.src)f3.src=f3.dataset.src;
+   setTimeout(()=>{try{f3.contentWindow.postMessage({type:'geolink-3d-active',active:true},'*');f3.contentWindow.dispatchEvent(new Event('resize'))}catch(e){}},320);
+  }else if(f3.getAttribute('src')){
+   try{f3.contentWindow.postMessage({type:'geolink-3d-active',active:false},'*')}catch(e){}
+  }
+ }
  pulseChartAnim(700);
  setTimeout(()=>{updateAll();if(window._triggerReveals)window._triggerReveals(id);if(id==='risk'){if(!lastMC||lastMC.sig!==inputSig())mcCalc(5000,true);else drawMC()}},30)
 }
@@ -3006,13 +3074,14 @@ window.addEventListener('message',e=>{const d=e.data;if(!d)return;
  updateAll();if(!d.isDefault)toast(d.gedongKm<2?`⚠ Tapak dalam buffer 2 km Gedong Songo (${fmt(d.gedongKm,2)} km) — cek modul Rekomendasi.`:`Tapak dikirim ke Rekomendasi: kopi ${fmt(d.coffee.km,1)} km, hortikultura ${fmt(d.hort.km,1)} km.`)});
 function postSummary(){const f=document.querySelector('.map-frame');if(!f||!R.best)return;try{f.contentWindow.postMessage({type:'geolink-summary',maxDist:num('maxDist'),orc:fmt(R.orc.net)+' MW',cas:fmt(R.cas.used)+' / '+fmt(R.cas.avail,1)+' MWth',best:SHORT(R.best.level)+' • '+SCN[R.best.level].split(' • ')[1],verdict:R.verdict},'*')}catch(e){}}
 const TOUR=[
- {page:'home',sel:'#home .lx-hero',t:'Selamat datang di GEO-LINK',b:'Platform ini mendampingi esai. Semua angka bawaan sama dengan esai: PLTP 20 MW + ORC ≈ 3 MW, NPV gabungan ≈ +0,5 juta dolar. Tombol “↺ Nilai esai” di bilah atas selalu mengembalikan angka ini.'},
- {page:'orc',sel:'#orc .grid2 .card',t:'1. Ubah kondisi sumur',b:'Ganti suhu, debit, atau efisiensi ORC. Hasilnya langsung mengalir ke Heat Cascade, Ekonomi, dan rekomendasi; lihat bilah ringkas di atas halaman.'},
- {page:'scenario',sel:'#scenTable',t:'2. Bandingkan skenario',b:'S0 PLTP saja sebagai pembanding, lalu S1 ORC, S2 + pengeringan kopi, S3 + ruang dingin. Tanda ★ menunjukkan skenario yang dipilih beserta alasannya.'},
- {page:'community',sel:'#community .grid2 .card:nth-child(2)',t:'3. Lihat manfaat bagi warga',b:'Manfaat petani (US$296 ribu/tahun pada asumsi esai), petani terlayani, lapangan kerja pemuda, dan bonus produksi untuk BUMDes.'},
- {page:'spatial',sel:'.map-frame',t:'4. Pilih tapak kandidat',b:'Di panel peta, klik “Tetapkan tapak di peta” lalu klik satu lokasi. Jarak ke kelompok tani kopi dan sentra sayur dikirim ke modul Rekomendasi. Peta memerlukan internet.'},
- {page:'decision',sel:'#decRules',t:'5. Baca rekomendasi',b:'Setiap kriteria punya nilai, ambang, dan status yang dapat diubah. Hasilnya dapat dicetak atau disimpan sebagai PDF.'},
- {page:'risk',sel:'#runMC',t:'6. Uji ketidakpastian',b:'Jalankan Monte Carlo 20.000 kali. Pada nilai esai, peluang NPV positif ≈ 46% dan diagram tornado menunjukkan parameter yang paling berpengaruh.'}];
+ {page:'home',sel:'#home .lx-hero',t:'Selamat datang di GEO-LINK',b:'Platform ini mencakup 10 modul terintegrasi, termasuk simulasi alur 3D interaktif. Semua angka bawaan selaras dengan esai: PLTP 20 MW + ORC ≈ 3 MW, NPV gabungan ≈ +0,5 juta dolar. Tombol “↺ Nilai esai” di bilah atas selalu mengembalikan angka ini.'},
+ {page:'sim3d',sel:'#sim3dWrap',t:'1. Jelajahi Simulasi Alur 3D',b:'Lihat alur fluida 3D dari sumur produksi → separator V-101 → turbin flash & ORC → pemanfaatan bertingkat 3 tahap → reinjeksi. Tur otomatis berjalan langsung; seret untuk memutar, cubit/gulir untuk zoom, coba mode Tembus Pandang & Penampang, atau klik “⇄ Sinkronkan dari ORC”. Di HP, ketuk “⛶ Layar penuh 3D”.'},
+ {page:'orc',sel:'#orc .grid2 .card',t:'2. Ubah kondisi sumur & ORC',b:'Ganti suhu, debit, atau efisiensi ORC. Hasilnya langsung mengalir ke Heat Cascade, Ekonomi, dan rekomendasi; lihat bilah ringkas di atas halaman.'},
+ {page:'scenario',sel:'#scenTable',t:'3. Bandingkan skenario',b:'S0 PLTP saja sebagai pembanding, lalu S1 ORC, S2 + pengeringan kopi, S3 + ruang dingin. Tanda ★ menunjukkan skenario yang dipilih beserta alasannya.'},
+ {page:'community',sel:'#community .grid2 .card:nth-child(2)',t:'4. Lihat manfaat bagi warga',b:'Manfaat petani (US$296 ribu/tahun pada asumsi esai), petani terlayani, lapangan kerja pemuda, dan bonus produksi untuk BUMDes.'},
+ {page:'spatial',sel:'.map-frame',t:'5. Pilih tapak kandidat',b:'Di panel peta, klik “Tetapkan tapak di peta” lalu klik satu lokasi. Jarak ke kelompok tani kopi dan sentra sayur dikirim ke modul Rekomendasi. Peta memerlukan internet.'},
+ {page:'decision',sel:'#decRules',t:'6. Baca rekomendasi',b:'Setiap kriteria punya nilai, ambang, dan status yang dapat diubah. Hasilnya dapat dicetak atau disimpan sebagai PDF.'},
+ {page:'risk',sel:'#runMC',t:'7. Uji ketidakpastian',b:'Jalankan Monte Carlo 20.000 kali. Pada nilai esai, peluang NPV positif ≈ 46% dan diagram tornado menunjukkan parameter yang paling berpengaruh.'}];
 let tourI=-1;
 function tourShow(i){document.querySelectorAll('.tour-hl').forEach(e=>e.classList.remove('tour-hl'));if(i<0||i>=TOUR.length){tourI=-1;const b=$('tourBox');if(b)b.remove();return}
  tourI=i;const s=TOUR[i];showPage(s.page);let box=$('tourBox');if(!box){box=document.createElement('div');box.id='tourBox';box.className='tour-box';document.body.appendChild(box)}
@@ -3260,7 +3329,7 @@ if(!seen)setTimeout(()=>tourShow(0),700);
   st.parentElement.insertBefore(bar,st);
   if(window.MutationObserver){new MutationObserver(applyZ).observe(st,{childList:true})}
  });
- // Layar penuh peta ramah iPhone Safari
+ // Layar penuh peta & simulasi 3D ramah iPhone Safari + sinkronisasi ORC ke 3D
  const mapWrap=$('mapWrap'),mapFsBtn=$('mapFsBtn'),mapFsClose=$('mapFsClose');
  function setMapFs(on){
   if(!mapWrap)return;
@@ -3271,6 +3340,37 @@ if(!seen)setTimeout(()=>tourShow(0),700);
  }
  if(mapFsBtn)mapFsBtn.addEventListener('click',()=>setMapFs(true));
  if(mapFsClose)mapFsClose.addEventListener('click',()=>setMapFs(false));
+
+ const sim3dWrap=$('sim3dWrap'),sim3dFrame=$('sim3dFrame'),sim3dFsBtn=$('sim3dFsBtn'),sim3dFsClose=$('sim3dFsClose');
+ function post3D(msg){
+  if(!sim3dFrame)return;
+  if(!sim3dFrame.getAttribute('src')&&sim3dFrame.dataset.src){
+   sim3dFrame.src=sim3dFrame.dataset.src;
+   sim3dFrame.addEventListener('load',()=>{try{sim3dFrame.contentWindow.postMessage(msg,'*')}catch(e){}},{once:true});
+   return;
+  }
+  try{sim3dFrame.contentWindow.postMessage(msg,'*')}catch(e){}
+ }
+ function setSim3dFs(on){
+  if(!sim3dWrap)return;
+  sim3dWrap.classList.toggle('is-fs',on);
+  document.body.style.overflow=on?'hidden':'';
+  setTimeout(()=>{post3D({type:'geolink-3d-active',active:true});try{sim3dFrame.contentWindow.dispatchEvent(new Event('resize'))}catch(e){}},260);
+ }
+ if(sim3dFsBtn)sim3dFsBtn.addEventListener('click',()=>setSim3dFs(true));
+ if(sim3dFsClose)sim3dFsClose.addEventListener('click',()=>setSim3dFs(false));
+ if($('sim3dSyncBtn'))$('sim3dSyncBtn').addEventListener('click',()=>{
+  const scn=num('pltpMW')>0?'A':'B';
+  const m=num('flow')||(scn==='A'?260:350);
+  const v=R.cas&&R.cas.avail>0?Math.min(1,Math.max(0.05,R.cas.used/R.cas.avail)):0.4;
+  post3D({type:'geolink-3d-sync',scn,m,v});
+  toast(`Disinkronkan ke Alur 3D: Skenario ${scn}, debit ${fmt(m,0)} kg/s, katup FV-301 ${fmt(v*100,0)}%.`);
+ });
+ if($('sim3dTourBtn'))$('sim3dTourBtn').addEventListener('click',()=>{post3D({type:'geolink-3d-tour',on:true});toast('Tur otomatis 3D dimulai.')});
+ if($('sim3dZoomIn'))$('sim3dZoomIn').addEventListener('click',()=>post3D({type:'geolink-3d-zoom',factor:0.82}));
+ if($('sim3dZoomOut'))$('sim3dZoomOut').addEventListener('click',()=>post3D({type:'geolink-3d-zoom',factor:1.22}));
+ if($('sim3dZoomReset'))$('sim3dZoomReset').addEventListener('click',()=>post3D({type:'geolink-3d-zoom',reset:true}));
+ document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){if(mapWrap&&mapWrap.classList.contains('is-fs'))setMapFs(false);if(sim3dWrap&&sim3dWrap.classList.contains('is-fs'))setSim3dFs(false)}});
  document.addEventListener('touchstart',ev=>{if(!ev.target.closest('canvas.interactive-chart,[data-svg-tip],.th-seg'))hideChartTip()},{passive:true});
 
  triggerReveals('home');
